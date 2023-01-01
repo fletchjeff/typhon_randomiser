@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>WebMidi.js Quick Start</title>
+
+    <style>
+      body {
+        font-family: FreeMono, monospace;
+        font-size: smaller;
+      }
+      .button {
+        background-color: #4caf50; /* Green */
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      .requestContainer {
+        border: 1px solid black;
+        width: 45%;
+      }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/webmidi@latest/dist/iife/webmidi.iife.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <script>
+      WebMidi.enable({ sysex: true })
+        .then(onEnabled)
+        .catch((err) => alert(err));
+
+      var mess;
+
+      function hexify(rawData) {
+        outString = "";
+        wrapCounter = 0;
+        for (byteIndex in rawData) {
+          if (rawData[byteIndex].toString(16).length == 1) {
+            padding = "0";
+          } else {
+            padding = "";
+          }
+          outString +=
+            padding + rawData[byteIndex].toString(16).toUpperCase() + " ";
+          if ((wrapCounter + 1) % 16 == 0) {
+            outString += "<br>";
+          }
+          wrapCounter += 1;
+        }
+        return outString;
+      }
+
+      function onEnabled() {
+        d3.select("#sendMessage").attr("onclick", "sendMessage(parseInt(d3.select('#patch1').property('value')));");
+        if (WebMidi.inputs.length < 1) {
+          document.body.innerHTML += "No device detected.";
+        } else {
+          WebMidi.inputs.forEach((device, index) => {
+            document.body.innerHTML += `${index}: ${device.name} <br>`;
+          });
+        }
+
+        const mySynth = WebMidi.inputs[0];
+
+        mySynth.addListener("sysex", (e) => {
+          console.log(e);
+          mess = e;
+          d3.select("#bytes1").html(hexify(e.rawData));
+        });
+      }
+
+      //const requestData = [240, 0, 33, 53, 0, 4, 8, 0, 0, 0, 0, 247];
+
+      function sendMessage(patchNum) {
+        console.log("test");
+        if ((typeof(patchNum) == 'number') && (patchNum <= 256) && (patchNum >= 1)) {
+          patch_byte_small = Math.floor(patchNum%16)
+          patch_byte_big = Math.floor(patchNum/16)
+          requestData = [240, 0, 33, 53, 0, 4, 8, patch_byte_small, patch_byte_big, 0, 0, 247];
+          console.log(requestData)
+          const Typhon = WebMidi.getOutputByName("Typhon")
+          Typhon.send(requestData);
+        }
+      }
+
+    
+
+   // const bytesExit = bytesUpdate.exit().remove();
+
+    // bytesEnter.merge(bytesUpdate).text(function(d){ console.log(d)});
+    // textEnter.merge(textUpdate)
+    //     .attr("x", (d, i) => i * 16)
+    //     .text(d => d);
+
+    </script>
+  </head>
+
+  <body>
+    <h1>WebMidi.js Quick Start</h1>
+    <div class="requestContainer" id="requestContainer1">
+      <div>
+        Patch Number (1 - 256) <input id="patch1" type="number" min="1" max="256" value="1">
+      </div>
+      <div id="sendMessage" class="button">Send Request</div>
+      <div id="bytes1">00</div>
+    </div>
+    <div id="bytes">bleugh</div>
+  </body>
+  <script>
+
+const bytes_div = d3.select("#bytes")
+      // .attr("width", width)
+      // .attr("height", 33)
+      // .attr("viewBox", `0 -20 ${width} 33`);
+    
+    let randomArray=Array.from({length: 100}, () => Math.floor(Math.random() * 100));
+    let sliced = [randomArray.slice(0,5),randomArray.slice(5,10)]
+
+    const bytesUpdate = bytes_div.selectAll(".bytes")
+      .data(randomArray);
+
+    // const bytesEnter = 
+    bytesUpdate.enter().append("div").attr("class", "bytes")
+    .text(function(d) { return d });
+  </script>
+</html>
+
+<!-- options = {}
+options.duration = 1000
+
+const SysexLib = WebMidi.outputs[1];
+SysexLib.channels[9].playNote("C4", duration=1000) -->
