@@ -24,17 +24,19 @@
   <body>
     <h1>Typhon Randomiser</h1>
 
-    <!-- <input type="range" class="input-knob" data-bgcolor="#111" data-fgcolor="#029b33" min="0" max="127" step="1" data-diameter="100" oninput="send_midi_cc(parseInt(d3.select('#cc_val').node().value),this.value)"/> -->
-    <div id="current_val"></div>
-    <!-- <div class="cc_dropdown">
-        <select name="cc_val" id="cc_val">
-        </select>          
-    </div> -->
+    <div id="midi_cc_num">
+        MIDI CC NUM: 
+    </div>
+    <div id="midi_cc_val">
+        MIDI CC VAL: 
+    </div>
+    <div id="midi_cc_chan">
+        MIDI CC CHAN: 
+    </div>    
   
     <div id="main_div">
         Main Div
     </div>
-
     <script src="typhon_randomiser.js"></script>
 </body>
 

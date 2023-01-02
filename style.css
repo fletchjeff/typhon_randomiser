@@ -1,14 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@600&display=swap');
+
 body {
     background-color: #f3f3f3;
     /* margin: 0 auto;
     width: 780px; */
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Comfortaa', 'Open Sans', sans-serif;
     font-size: 12px;
+    font-weight: 600;
     /*  font-weight: 100;*/
+}
+
+.slider {
+    background-color: #999;
+    border: 1px solid;
+    padding : 10px;
+    margin: 10px;
+    text-align: center;
+    width: 50px;
+    height: 140px;
 }
 
 .knob {
     background-color: #999;
     border: 1px solid;
     padding : 10px;
+    margin: 10px;
+    text-align: center;
+    width: 80px;
+    height: 140px;
+}
+
+.section_div {
+    border: 1px solid;
+    /* height: 100%; */
+    overflow: hidden;
+    padding: 10px;
+    background-color: #67aebe;
+}
+
+.section_header {
+    font-weight: 800;
+    font-size: x-large;
 }
