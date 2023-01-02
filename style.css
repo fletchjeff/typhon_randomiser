@@ -1,0 +1,14 @@
+body {
+    background-color: #f3f3f3;
+    /* margin: 0 auto;
+    width: 780px; */
+    font-family: 'Open Sans', sans-serif;
+    font-size: 12px;
+    /*  font-weight: 100;*/
+}
+
+.knob {
+    background-color: #999;
+    border: 1px solid;
+    padding : 10px;
+}
