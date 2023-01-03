@@ -1,7 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@600&display=swap');
 
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 700,
+  'GRAD' 0,
+  'opsz' 48;
+}
+
 body {
-    background-color: #f3f3f3;
+    background-color: #f1ffef;
     /* margin: 0 auto;
     width: 780px; */
     font-family: 'Comfortaa', 'Open Sans', sans-serif;
@@ -11,18 +19,18 @@ body {
 }
 
 .slider {
-    background-color: #999;
-    border: 1px solid;
+    /* background-color: #999;
+    border: 1px solid; */
     padding : 10px;
     margin: 10px;
     text-align: center;
-    width: 50px;
+    width: 40px;
     height: 140px;
 }
 
 .knob {
-    background-color: #999;
-    border: 1px solid;
+    /* background-color: #999;
+    border: 1px solid; */
     padding : 10px;
     margin: 10px;
     text-align: center;
@@ -35,10 +43,31 @@ body {
     /* height: 100%; */
     overflow: hidden;
     padding: 10px;
-    background-color: #67aebe;
+    background-color: #062800;
+    color: #eee;
 }
 
 .section_header {
     font-weight: 800;
     font-size: x-large;
+}
+
+.knob_header {
+    /* background-color: #999;
+    border: 1px solid; */
+    /* padding : 10px;
+    margin: 10px;
+    text-align: center;
+    width: 80px; */
+    height: 30px;
+}
+
+.knob_val {
+    /* background-color: #999;
+    border: 1px solid; */
+    /* padding : 10px;
+    margin: 10px;
+    text-align: center;
+    width: 80px; */
+    padding-top: 5px;
 }
