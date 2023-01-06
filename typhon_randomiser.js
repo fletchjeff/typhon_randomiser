@@ -1,3 +1,9 @@
+//TODO
+// Channel Number selector
+// Midi Device selector
+// Hints and Docs
+// Per section randomiser button
+
 let channel = 9;
 let midi_device = "Typhon";
 let state_data = [];
@@ -136,7 +142,6 @@ function knob_val_change(cc_num, cc_min, cc_max, val_min, val_max, val_step, kno
         names: names,
         val_id: val_id,
     };
-    //   console.log(`cc_min = ${cc_min}, cc_max = ${cc_max}, val_min = ${val_min}, val_max = ${val_max}, val_step = ${val_step}, knob_val = ${knob_val}`)
     if (names == "-") {
         d3.select("#" + val_to_update).text(Math.round(knob_val));
     } else {
@@ -153,7 +158,7 @@ function knob_val_change(cc_num, cc_min, cc_max, val_min, val_max, val_step, kno
 
     // Send MIDI CCs
 
-    //WebMidi.getOutputByName('Typhon').channels[channel].sendControlChange(cc_num, cc_val);
+    WebMidi.getOutputByName(midi_device).channels[channel].sendControlChange(cc_num, scaled_midi_val(knob_val));
 
     set_fx_mod_headers();
 

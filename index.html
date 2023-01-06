@@ -5,12 +5,10 @@
   <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="style.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />    
     <title>WebMidi.js Quick Start</title>
     <script src="https://cdn.jsdelivr.net/npm/webmidi@latest/dist/iife/webmidi.iife.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>    
-    <!-- <script src="input-knobs.js"></script> -->
+    <script src="https://kit.fontawesome.com/abe1754c8b.js" crossorigin="anonymous"></script>
     <script type="module">
         WebMidi
           .enable()
@@ -24,9 +22,33 @@
 </head>
   
   <body>
-    <h1>Typhon Randomiser <span class="material-symbols-outlined">casino</span></h1> 
+    <h1 style="text-align: center;">Dreadbox Typhon Randomiser</i></h1>
+    <h2><i class="fa-solid fa-dice fa-xl" id="randomise_all" onclick="randomizer(state_data)"></i> <i class="fa-solid fa-arrow-left"></i> Click to randomise all parameters</h2>
+    <label for="channel">Choose the Typhon midi channel</label>
+    <select name="channel" id="midi_channel">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9" selected>9</option>
+      <option value="10">10</option>
+      <option value="11">11</option>
+      <option value="12">12</option>
+      <option value="13">13</option>
+      <option value="14">14</option>
+      <option value="15">15</option>
+      <option value="16">16</option>
+    </select>
+    <label for="midi_device">Choose the Typhon midi device</label>
+    <select name="channel" id="midi_channel">
+      <option value="Typhon">Tyhon</option>
+    </select>
 
-    <div id="midi_cc_num">
+    <!-- <div id="midi_cc_num">
         MIDI CC NUM: 
     </div>
     <div id="midi_cc_val">
@@ -34,7 +56,7 @@
     </div>
     <div id="midi_cc_chan">
         MIDI CC CHAN: 
-    </div>    
+    </div>     -->
   
     <div id="main_div">
     </div>
