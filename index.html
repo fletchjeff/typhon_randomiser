@@ -9,7 +9,8 @@
     <title>WebMidi.js Quick Start</title>
     <script src="https://cdn.jsdelivr.net/npm/webmidi@latest/dist/iife/webmidi.iife.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="input-knobs.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>    
+    <!-- <script src="input-knobs.js"></script> -->
     <script type="module">
         WebMidi
           .enable()
@@ -19,12 +20,12 @@
         function onEnabled() {
             console.log(WebMidi.outputs);
         }
-      </script>  
+      </script>
 </head>
   
   <body>
-    <h1>Typhon Randomiser <span class="material-symbols-outlined">casino</span></h1>
-     
+    <h1>Typhon Randomiser <span class="material-symbols-outlined">casino</span></h1> 
+
     <div id="midi_cc_num">
         MIDI CC NUM: 
     </div>
@@ -36,8 +37,8 @@
     </div>    
   
     <div id="main_div">
-        Main Div
     </div>
+
     <script src="typhon_randomiser.js"></script>
 </body>
 
