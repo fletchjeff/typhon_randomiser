@@ -26,7 +26,7 @@
             .attr("value", (d) => d.name)
             .text(d => d.name)
             .attr("selected",(d) => { 
-                return d=="Typhon" ? "" : null
+                return d.name=="Typhon" ? "" : null
             })
         }
       </script>
