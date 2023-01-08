@@ -1,7 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@600&display=swap');
 
+:root {
+  --blue: #54B8C3;
+  --yellow: #F7D949;
+  --grey: #3A3D43;
+}
+
 body {
-    background-color: #f1ffef;
+    background-color: var(--blue);
+    color: var(--grey);
     margin: 0 auto;
     max-width: 780px;
     font-family: 'Comfortaa', 'Open Sans', sans-serif;
@@ -10,20 +17,26 @@ body {
 }
 
 select {
-  width: 100%;
-  padding: 16px 20px;
+  padding: 5px 5px;
+  margin: 5px 5px;
   border: none;
-  border-radius: 4px;
-  background-color: #f1f1f1;
+  background-color: var(--grey);
+  color: var(--yellow);
+}
+
+label {
+  font-size: 15px;
+  display: inline-block;
+  width: 270px;  
 }
 
 .section_div {
     max-width: 760px;
-    border: 1px solid;
+    border: 1px solid var(--blue);
     overflow: visible;
     padding: 10px;
-    background-color: #062800;
-    color: #eee;
+    background-color: var(--grey);
+    color: var(--yellow);
 }
 
 .section_header {
@@ -51,7 +64,13 @@ select {
   cursor: pointer;
 }
 
-
+#randomiser_div {
+    font-size: 20px;
+    padding: 15px 0 12px 10px;
+    background: var(--grey);
+    color: var(--yellow);
+    height: 25px;
+}
 input[type=range] {
     -webkit-appearance: none;
     margin-top: 5px;

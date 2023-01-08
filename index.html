@@ -16,37 +16,36 @@
           .catch(err => alert(err));
       
         function onEnabled() {
-            console.log(WebMidi.outputs);
+          d3.select("#midi_device")
+            .on("change", d => {
+              midi_device = d3.select("#midi_device").node().value
+            })
+            .selectAll("option")
+            .data(WebMidi.outputs)
+            .join("option")
+            .attr("value", (d) => d.name)
+            .text(d => d.name)
+            .attr("selected",(d) => { 
+                return d=="Typhon" ? "" : null
+            })
         }
       </script>
 </head>
   
   <body>
     <h1 style="text-align: center;">Dreadbox Typhon Randomiser</i></h1>
-    <h2><i class="fa-solid fa-dice fa-xl" id="randomise_all" onclick="randomizer(state_data)"></i> <i class="fa-solid fa-arrow-left"></i> Click to randomise all parameters</h2>
-    <label for="channel">Choose the Typhon midi channel</label>
-    <select name="channel" id="midi_channel">
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
-      <option value="6">6</option>
-      <option value="7">7</option>
-      <option value="8">8</option>
-      <option value="9" selected>9</option>
-      <option value="10">10</option>
-      <option value="11">11</option>
-      <option value="12">12</option>
-      <option value="13">13</option>
-      <option value="14">14</option>
-      <option value="15">15</option>
-      <option value="16">16</option>
-    </select>
-    <label for="midi_device">Choose the Typhon midi device</label>
-    <select name="channel" id="midi_channel">
+    <label for="channel">Choose the Typhon midi channel: </label>
+    <select name="channel" id="midi_channel"></select><br>
+    <label for="midi_device">Choose the Typhon midi device: </label>
+    <select name="device" id="midi_device">
       <option value="Typhon">Tyhon</option>
     </select>
+    <div id="randomiser_div">
+      <i class="fa-solid fa-dice fa-lg" id="randomise_all" onclick="randomiser(state_data)"></i> <i class="fa-solid fa-arrow-left"></i> Randomise All
+      <span style="float: right; margin-right: 25px;">
+        Randomise Section <i class="fa-solid fa-arrow-down"></i> 
+      </span>
+    </div>
 
     <!-- <div id="midi_cc_num">
         MIDI CC NUM: 

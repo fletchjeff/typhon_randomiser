@@ -1,8 +1,11 @@
 //TODO
-// Channel Number selector
-// Midi Device selector
 // Hints and Docs
-// Per section randomiser button
+// STEP randomiser
+// Change decimal places on Tune 2
+// Exclude Volume and VCO level from randomiser
+// Maybe per knob exlusion button
+// Randomisation variance option 0.1 0.5 1
+// Add reset to zero button on each section and all - Init
 
 let channel = 9;
 let midi_device = "Typhon";
@@ -84,28 +87,66 @@ function create_cc_divs(all_cc_names) {
         })
         .on("input", (e, d) => {
             let names_list = d[1][0].NAMES == "-" ? "-" : d[1][0].NAMES.replaceAll("'", '"');
-            return knob_val_change(d[1][0].CC_NUM, d[1][0].CC_MIN, d[1][0].CC_MAX, d[1][0].VAL_MIN, d[1][0].VAL_MAX, d[1][0].VAL_STEP, e.srcElement.value, channel, e.srcElement.id, names_list, d[1][0].SECTION, d[1][0].CC_NAME, false);
+            return knob_val_change(
+                parseInt(d[1][0].CC_NUM), 
+                d[1][0].CC_MIN, 
+                d[1][0].CC_MAX, 
+                d[1][0].VAL_MIN, 
+                d[1][0].VAL_MAX, 
+                d[1][0].VAL_STEP, 
+                e.srcElement.value, 
+                channel, 
+                e.srcElement.id, 
+                names_list, 
+                d[1][0].SECTION, 
+                d[1][0].CC_NAME, 
+                false);
         });
 
+    //This adds the section text to the top of the DIV
     section_divs
         .insert("div", "div")
-        .text((d) => {
-            return d[0];
-        })
+        .text((d) => d[0])
         .attr("class", "section_header")
         .attr("id", (d) => {
             return "section_header_" + d[0];
-        });
+        })
+        .append("i")
+            .attr("class", 'fa-solid fa-dice')
+            .attr("style","float:right;margin-right:10px;cursor:pointer;")
+            .attr("id", d => "rand_" + d[0])
+            .on("click", (e,d) => {
+                randomiser(state_data,d[0])
+            })
+
 }
 
 // The hard coded things
 function set_fx_mod_headers() {
-    d3.select("#section_header_FX1").text(d3.select("#section_header_FX1").text().split(" ")[0] + " - " + d3.select("#val_FX1_TYPE").text());
-    d3.select("#section_header_FX2").text(d3.select("#section_header_FX2").text().split(" ")[0] + " - " + d3.select("#val_FX2_TYPE").text());
-    d3.select("#section_header_FX3").text(d3.select("#section_header_FX3").text().split(" ")[0] + " - " + d3.select("#val_FX3_TYPE").text());
-    d3.select("#section_header_M1").text(d3.select("#section_header_M1").text().split(" ")[0] + " - " + d3.select("#val_M1_MODE").text());
-    d3.select("#section_header_M2").text(d3.select("#section_header_M2").text().split(" ")[0] + " - " + d3.select("#val_M2_MODE").text());
-    d3.select("#section_header_M3").text(d3.select("#section_header_M3").text().split(" ")[0] + " - " + d3.select("#val_M3_MODE").text());
+    let fx_mods = ['FX1','FX2','FX3','M1','M2','M3']
+    fx_mods.forEach((fx_mod) => {
+        if (fx_mod[0] == "F") {
+            d3.select("#section_header_" + fx_mod)
+                .text(fx_mod + " - " + d3.select("#val_" + fx_mod +"_TYPE").text())
+                .append("i")
+                .attr("class", 'fa-solid fa-dice')
+                .attr("style","float:right;margin-right:10px;cursor:pointer;")
+                .attr("id", d => "rand_" + fx_mod)
+                .on("click", (e,d) => {
+                    randomiser(state_data,fx_mod)
+                })
+        } else {
+            d3.select("#section_header_" + fx_mod)
+                .text(fx_mod + " - " + d3.select("#val_" + fx_mod +"_MODE").text())
+                .append("i")
+                .attr("class", 'fa-solid fa-dice')
+                .attr("style","float:right;margin-right:10px;cursor:pointer;")
+                .attr("id", d => "rand_" + fx_mod)
+                .on("click", (e,d) => {
+                    randomiser(state_data,fx_mod)
+                })
+        }
+    })
 }
 
 d3.csv("https://docs.google.com/spreadsheets/d/1bjHyeFA21qd2ytvMo8Zo4X4e7A6cmajUBeerextgFPE/gviz/tq?tqx=out:csv")
@@ -120,6 +161,20 @@ d3.csv("https://docs.google.com/spreadsheets/d/1bjHyeFA21qd2ytvMo8Zo4X4e7A6cmajU
 
         // Do the hard coded UI things
         set_fx_mod_headers();
+
+        // Create the midi channel selector
+        d3.select("#midi_channel")
+            .on("change", d => {
+                channel = d3.select("#midi_channel").node().value
+            })
+            .selectAll("option")
+            .data(d3.range(1,17,1))
+            .join("option")
+            .attr("value", (d) => d)
+            .text(d => d)
+            .attr("selected",(d) => { 
+                return d==9 ? "" : null
+            })
     })
     .catch((error) => {
         console.error(error);
@@ -128,7 +183,21 @@ d3.csv("https://docs.google.com/spreadsheets/d/1bjHyeFA21qd2ytvMo8Zo4X4e7A6cmajU
 // This runs on a knob update
 function knob_val_change(cc_num, cc_min, cc_max, val_min, val_max, val_step, knob_val, channel, val_id, names, section, cc_name, from_random) {
     // Update state_data
-    val_to_update = val_id.replace("knob_", "val_");
+    val_to_update = val_id.replace("knob_", "val_");    
+    // console.log("cc_min " +cc_min)
+    // console.log("cc_max " +cc_max)
+    // console.log("val_min " +val_min)
+    // console.log("val_max " +val_max)
+    // console.log("val_step " +val_step)
+    // console.log("knob_val " +knob_val)
+    // console.log("channel " +channel)
+    // console.log("val_id " +val_id)
+    // console.log("names " +names)
+    // console.log("section " +section)
+    // console.log("cc_name " +cc_name)
+    // console.log("from_random " +from_random)
+    // console.log("------\n")
+
     state_data[state_data.indexOf(d3.filter(state_data, (d) => d.cc_num == cc_num)[0])] = {
         cc_num: cc_num,
         cc_min: cc_min,
@@ -142,31 +211,28 @@ function knob_val_change(cc_num, cc_min, cc_max, val_min, val_max, val_step, kno
         names: names,
         val_id: val_id,
     };
-    if (names == "-") {
-        d3.select("#" + val_to_update).text(Math.round(knob_val));
-    } else {
-        let names_temp = JSON.parse(names);
-        d3.select("#" + val_to_update).text(names_temp[Math.round(knob_val / val_step)]);
-    }
 
     //Scales the Midi CC val to the knob input ranges
-    scaled_midi_val = d3.scaleLinear().domain([val_min, val_max]).rangeRound([cc_min, cc_max]).clamp(true);
+    let scaled_midi_val = d3.scaleLinear().domain([val_min, val_max]).rangeRound([cc_min, cc_max]).clamp(true);
 
-    d3.select("#midi_cc_num").text("MIDI CC NUM: " + cc_num);
-    d3.select("#midi_cc_val").text("MIDI CC VAL: " + scaled_midi_val(knob_val));
-    d3.select("#midi_cc_chan").text("MIDI CC CHAN: " + channel);
-
-    // Send MIDI CCs
-
-    WebMidi.getOutputByName(midi_device).channels[channel].sendControlChange(cc_num, scaled_midi_val(knob_val));
+    // Send the Midi CC
+    WebMidi.getOutputByName(midi_device).channels[channel].sendControlChange(parseInt(cc_num), scaled_midi_val(knob_val));
 
     set_fx_mod_headers();
 
+    //if this comes from a randomiser, update the value AND property of the slider
     if (from_random) {
         d3.select("#" + val_id).attr("value", knob_val);
         d3.select("#" + val_id).property("value", knob_val);
     }
 
+    //Update the value of the knob value display
+    if (names == "-") {
+        d3.select("#" + val_to_update).text(d => Math.round(knob_val));
+    } else {
+        let names_temp = JSON.parse(names);
+        d3.select("#" + val_to_update).text(names_temp[Math.round(knob_val / val_step)]);
+    }
     //Update the FX and MOD knob if TYPE changes
     const type_knob_ids = ["knob_FX1_TYPE", "knob_FX2_TYPE", "knob_FX3_TYPE", "knob_M1_MODE", "knob_M2_MODE", "knob_M3_MODE"];
     if (type_knob_ids.includes(val_id)) {
@@ -180,7 +246,8 @@ function knob_val_change(cc_num, cc_min, cc_max, val_min, val_max, val_step, kno
         };
         fx_param_count[section].forEach((e) => {
             // Create new data for knob
-            new_knob_data = d3.filter(data, (d) => (d.TYPE == d3.select("#" + val_to_update).text()) & (d.CC_NAME == section + " PARAMETER " + e));
+            let new_knob_data = d3.filter(data, (d) => (d.TYPE == d3.select("#" + val_to_update).text()) & (d.CC_NAME == section + " PARAMETER " + e));
+
 
             //Update Knob heading
             d3.select("#knob_header_" + section + "_PARAMETER_" + e).text(new_knob_data[0].VAL_NAME);
@@ -191,21 +258,21 @@ function knob_val_change(cc_num, cc_min, cc_max, val_min, val_max, val_step, kno
                 .attr("max", new_knob_data[0].VAL_MAX)
                 .attr("step", new_knob_data[0].VAL_STEP)
                 .attr("value", new_knob_data[0].VAL_DEFAULT)
-                .on("input", (e, d) => {
-                    let names_list = d[1][0].NAMES == "-" ? "-" : d[1][0].NAMES.replaceAll("'", '"');
-                    return knob_val_change(
-                        d[1][0].CC_NUM,
-                        d[1][0].CC_MIN,
-                        d[1][0].CC_MAX,
-                        d[1][0].VAL_MIN,
-                        d[1][0].VAL_MAX,
-                        d[1][0].VAL_STEP,
-                        e.srcElement.value,
+                .on("input", (f) => {
+                    let names_list = new_knob_data[0].NAMES == "-" ? "-" : new_knob_data[0].NAMES.replaceAll("'", '"');
+                    knob_val_change(
+                        new_knob_data[0].CC_NUM,
+                        new_knob_data[0].CC_MIN,
+                        new_knob_data[0].CC_MAX,
+                        new_knob_data[0].VAL_MIN,
+                        new_knob_data[0].VAL_MAX,
+                        new_knob_data[0].VAL_STEP,
+                        f.srcElement.value,
                         channel,
-                        e.srcElement.id,
+                        f.srcElement.id,
                         names_list,
-                        d[1][0].SECTION,
-                        d[1][0].CC_NAME,
+                        new_knob_data[0].SECTION,
+                        new_knob_data[0].CC_NAME,
                         false
                     );
                 });
@@ -213,16 +280,18 @@ function knob_val_change(cc_num, cc_min, cc_max, val_min, val_max, val_step, kno
             d3.select("#val_" + section + "_PARAMETER_" + e).text((d) => {
                 if (new_knob_data[0].NAMES == "-") {
                     return new_knob_data[0].VAL_DEFAULT;
+                    
                 } else {
                     item_index = Math.round(new_knob_data[0].VAL_DEFAULT / new_knob_data[0].VAL_STEP);
                     return JSON.parse(new_knob_data[0].NAMES.replaceAll("'", '"'))[item_index];
                 }
-            });
-        });
+            })
+        });   
     }
+
 }
 
-function randomizer(local_state_data, section) {
+function randomiser(local_state_data, section) {
     // Iterate through each state item.
     if (section) {
         section_data = d3.filter(local_state_data, (d) => d.section == section);
