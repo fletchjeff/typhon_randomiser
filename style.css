@@ -71,6 +71,13 @@ label {
     color: var(--yellow);
     height: 25px;
 }
+
+.random_factor{
+  background-color: var(--blue);
+  padding: 2px 10px 2px 10px;
+  cursor: pointer;
+}
+
 input[type=range] {
     -webkit-appearance: none;
     margin-top: 5px;

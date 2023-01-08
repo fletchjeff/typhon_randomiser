@@ -39,24 +39,15 @@
     <label for="midi_device">Choose the Typhon midi device: </label>
     <select name="device" id="midi_device">
       <option value="Typhon">Tyhon</option>
-    </select>
+    </select><br>
     <div id="randomiser_div">
-      <i class="fa-solid fa-dice fa-lg" id="randomise_all" onclick="randomiser(state_data)"></i> <i class="fa-solid fa-arrow-left"></i> Randomise All
+      <i class="fa-solid fa-dice-five fa-lg" id="randomise_all" onclick="randomiser(state_data,false)"></i> <i class="fa-solid fa-arrow-left"></i> Randomise All&nbsp;&nbsp;&nbsp;&nbsp;
+      <i class="fa-solid fa-trash-can fa-lg" id="init_all" onclick="randomiser(init_data,true)"></i> <i class="fa-solid fa-arrow-left"></i> Initialise All
       <span style="float: right; margin-right: 25px;">
-        Randomise Section <i class="fa-solid fa-arrow-down"></i> 
-      </span>
+        Init / Random Section <i class="fa-solid fa-arrow-down"></i>
+      </span>      
     </div>
 
-    <!-- <div id="midi_cc_num">
-        MIDI CC NUM: 
-    </div>
-    <div id="midi_cc_val">
-        MIDI CC VAL: 
-    </div>
-    <div id="midi_cc_chan">
-        MIDI CC CHAN: 
-    </div>     -->
-  
     <div id="main_div">
     </div>
 
