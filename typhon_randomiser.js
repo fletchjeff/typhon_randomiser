@@ -370,17 +370,30 @@ function randomiser(local_state_data, init, section) {
         }
         knob_val_change(d.cc_num, d.cc_min, d.cc_max, d.val_min, d.val_max, d.val_step, rand_val, channel, d.val_id, d.names, d.section, d.cc_name, true);
 
-        //TODO
-        //Add the STEP option randomiser
     });
 
+    // this randomises each of the M STEP options, very badly.
     if (["M1","M2","M3"].includes(section) || !section) {
         let mod_section_list = []
         if (!section) { mod_section_list = ["M1","M2","M3"]}
         else {mod_section_list = [section]}
-        //console.log(mod_section_list)
         mod_section_list.forEach((g) => {
-            
+            d3.shuffle(d3.range(0,127)).forEach((k) => {
+                let M_map = {
+                    "M1":[41,42],
+                    "M2":[57,58],
+                    "M3":[74,75]
+                }
+                if (WebMidi.outputs.length > 0){
+
+                    //Select random step
+                    WebMidi.getOutputByName(midi_device).channels[channel].
+                    sendControlChange(M_map[g][0], k);
+
+                    // Give it a random value
+                    WebMidi.getOutputByName(midi_device).channels[channel].sendControlChange(M_map[g][1], d3.randomInt(128)());
+                }
+            })
             //console.log(section)
             //console.log(d3.filter(section_data, (d) => d.cc_name == g + " MODE")[0]) 
         })
