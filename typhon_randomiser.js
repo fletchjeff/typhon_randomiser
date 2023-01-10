@@ -1,6 +1,6 @@
 //TODO
 // Hints and Docs
-// STEP randomiser
+// STEP randomiser - send midi cc 1-32 streps 32/128 step size, shuffleed with d3.shuffle
 // Change decimal places on Tune 2
 
 // Maybe per knob exlusion button
