@@ -16,18 +16,23 @@
           .catch(err => alert(err));
       
         function onEnabled() {
-          d3.select("#midi_device")
-            .on("change", d => {
-              midi_device = d3.select("#midi_device").node().value
-            })
-            .selectAll("option")
-            .data(WebMidi.outputs)
-            .join("option")
-            .attr("value", (d) => d.name)
-            .text(d => d.name)
-            .attr("selected",(d) => { 
-                return d.name=="Typhon" ? "" : null
-            })
+            if (WebMidi.outputs.lenght > 0){
+                d3.select("#midi_device")
+                  .on("change", d => {
+                    midi_device = d3.select("#midi_device").node().value
+                  })
+                  .selectAll("option")
+                  .data(WebMidi.outputs)
+                  .join("option")
+                  .attr("value", (d) => d.name)
+                  .text(d => d.name)
+                  .attr("selected",(d) => { 
+                      return d.name=="Typhon" ? "" : null
+                })
+            }
+            else {
+              alert("No Midi Devices Detected")
+            }
         }
       </script>
 </head>
@@ -38,7 +43,7 @@
     <select name="channel" id="midi_channel"></select><br>
     <label for="midi_device">Choose the Typhon midi device: </label>
     <select name="device" id="midi_device">
-      <option value="Typhon">Tyhon</option>
+      <option value="Typhon">Not a Typhon</option>
     </select><br>
     <div id="randomiser_div">
       <i class="fa-solid fa-dice-five fa-lg" id="randomise_all" onclick="randomiser(state_data,false)"></i> <i class="fa-solid fa-arrow-left"></i> Randomise All&nbsp;&nbsp;&nbsp;&nbsp;
