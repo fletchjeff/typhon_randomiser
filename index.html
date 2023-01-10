@@ -15,8 +15,10 @@
           .then(onEnabled)
           .catch(err => alert(err));
       
+        let has_typhon = false
+
         function onEnabled() {
-            if (WebMidi.outputs.lenght > 0){
+            if (WebMidi.outputs.length > 0){
                 d3.select("#midi_device")
                   .on("change", d => {
                     midi_device = d3.select("#midi_device").node().value
@@ -27,8 +29,16 @@
                   .attr("value", (d) => d.name)
                   .text(d => d.name)
                   .attr("selected",(d) => { 
-                      return d.name=="Typhon" ? "" : null
+                      if (d.name=="Typhon") {
+                        has_typhon = true
+                        return ""
+                      } else {
+                        return null 
+                      }
                 })
+                if (!has_typhon) {
+                  midi_device = WebMidi.outputs[0].name
+                }
             }
             else {
               alert("No Midi Devices Detected")

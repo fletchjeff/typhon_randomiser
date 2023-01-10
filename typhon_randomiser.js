@@ -380,8 +380,9 @@ function randomiser(local_state_data, init, section) {
         else {mod_section_list = [section]}
         //console.log(mod_section_list)
         mod_section_list.forEach((g) => {
-            console.log(section)
-            console.log(d3.filter(section_data, (d) => d.cc_name == g + " MODE")[0]) 
+            
+            //console.log(section)
+            //console.log(d3.filter(section_data, (d) => d.cc_name == g + " MODE")[0]) 
         })
     }
 }
