@@ -1,6 +1,6 @@
 //TODO
 // Hints and Docs
-// STEP randomiser - send midi cc 1-32 streps 32/128 step size, shuffleed with d3.shuffle
+// STEP randomiser
 // Change decimal places on Tune 2
 
 // Maybe per knob exlusion button
@@ -270,8 +270,10 @@ function knob_val_change(cc_num, cc_min, cc_max, val_min, val_max, val_step, kno
     let scaled_midi_val = d3.scaleLinear().domain([val_min, val_max]).rangeRound([cc_min, cc_max]).clamp(true);
 
     // Send the Midi CC
-    WebMidi.getOutputByName(midi_device).channels[channel].sendControlChange(parseInt(cc_num), scaled_midi_val(knob_val));
-
+    if (WebMidi.outputs.length > 0){
+        WebMidi.getOutputByName(midi_device).channels[channel].sendControlChange(parseInt(cc_num), scaled_midi_val(knob_val));
+    }
+    
     //if this comes from a randomiser, update the value AND property of the slider
     if (from_random) {
         d3.select("#" + val_id).attr("value", knob_val);
@@ -371,4 +373,15 @@ function randomiser(local_state_data, init, section) {
         //TODO
         //Add the STEP option randomiser
     });
+
+    if (["M1","M2","M3"].includes(section) || !section) {
+        let mod_section_list = []
+        if (!section) { mod_section_list = ["M1","M2","M3"]}
+        else {mod_section_list = [section]}
+        //console.log(mod_section_list)
+        mod_section_list.forEach((g) => {
+            console.log(section)
+            console.log(d3.filter(section_data, (d) => d.cc_name == g + " MODE")[0]) 
+        })
+    }
 }
